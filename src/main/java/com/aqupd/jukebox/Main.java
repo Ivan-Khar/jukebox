@@ -1,5 +1,6 @@
 package com.aqupd.jukebox;
 
+import com.aqupd.jukebox.audio.QueueManager;
 import lavalink.client.io.jda.JdaLavalink;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Activity;
@@ -42,7 +43,7 @@ public class Main {
 
   public static JDA jda;
   public static JdaLavalink lavalink = new JdaLavalink(1, (a) -> jda);
-
+  public static QueueManager queueManager = new QueueManager();
 
   public static final Logger LOGGER = LogManager.getLogger("Jukebox");
 

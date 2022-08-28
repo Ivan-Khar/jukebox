@@ -1,5 +1,6 @@
 package com.aqupd.jukebox;
 
+import com.aqupd.jukebox.audio.QueueManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -8,6 +9,7 @@ import kong.unirest.json.JSONObject;
 import lavalink.client.LavalinkUtil;
 import lavalink.client.io.jda.JdaLink;
 import lavalink.client.player.IPlayer;
+import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
@@ -43,14 +45,19 @@ public class Listener extends ListenerAdapter {
     JdaLink link = lavalink.getLink(vc.getGuild());
     link.connect(vc);
     IPlayer player = link.getPlayer();
-    switch (message) {
+    switch (message.substring(0, message.indexOf(" "))) {
       case "sht" -> {
         link.destroy();
         lavalink.shutdown();
         jda.shutdown();
         System.exit(0);
       }
-      case "play" -> player.playTrack(getAudioTrack("ytsearch:Enemy").get(0));
+      case "play" -> {
+        if(event.getMember().getVoiceState().inAudioChannel()) {
+          VoiceChannel playvoice = jda.getVoiceChannelById(event.getMember().getVoiceState().getChannel().getId());
+          queueManager.addToQueue(getAudioTrack("ytsearch:" + message.substring(message.indexOf(" "))).get(0), playvoice);
+        }
+      }
       case "np" -> LOGGER.info(link.getPlayer().getTrackPosition());
     }
   }
