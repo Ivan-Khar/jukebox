@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 import static com.aqupd.jukebox.Config.*;
 
@@ -43,8 +44,7 @@ public class Main {
 
   public static JDA jda;
   public static JdaLavalink lavalink = new JdaLavalink(1, (a) -> jda);
-  public static QueueManager queueManager = new QueueManager();
-
+  public static HashMap<String, QueueManager> queues = new HashMap<>();
   public static final Logger LOGGER = LogManager.getLogger("Jukebox");
 
   public static void main(String[] args) {

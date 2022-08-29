@@ -1,15 +1,12 @@
 package com.aqupd.jukebox;
 
 import com.aqupd.jukebox.audio.QueueManager;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import kong.unirest.Unirest;
 import kong.unirest.json.JSONObject;
 import lavalink.client.LavalinkUtil;
 import lavalink.client.io.jda.JdaLink;
 import lavalink.client.player.IPlayer;
-import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
@@ -41,11 +38,15 @@ public class Listener extends ListenerAdapter {
   @Override
   public void onMessageReceived(MessageReceivedEvent event) {
     String message = event.getMessage().getContentDisplay();
+    String[] args = message.split(" ", 2);
+
     VoiceChannel vc = jda.getVoiceChannelById(getVC());
+    String guildId = event.getGuild().getId();
     JdaLink link = lavalink.getLink(vc.getGuild());
     link.connect(vc);
     IPlayer player = link.getPlayer();
-    switch (message.substring(0, message.indexOf(" "))) {
+
+    switch (args[0]) {
       case "sht" -> {
         link.destroy();
         lavalink.shutdown();
@@ -55,7 +56,12 @@ public class Listener extends ListenerAdapter {
       case "play" -> {
         if(event.getMember().getVoiceState().inAudioChannel()) {
           VoiceChannel playvoice = jda.getVoiceChannelById(event.getMember().getVoiceState().getChannel().getId());
-          queueManager.addToQueue(getAudioTrack("ytsearch:" + message.substring(message.indexOf(" "))).get(0), playvoice);
+          if(queues.containsKey(guildId)) {
+            queues.get(guildId).add(getAudioTrack("ytsearch:" + args[1]).get(0), playvoice);
+          } else {
+            queues.put(guildId, new QueueManager(guildId));
+            queues.get(guildId).add(getAudioTrack("ytsearch:" + args[1]).get(0), playvoice);
+          }
         }
       }
       case "np" -> LOGGER.info(link.getPlayer().getTrackPosition());
