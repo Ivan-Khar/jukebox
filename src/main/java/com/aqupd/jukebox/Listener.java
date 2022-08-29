@@ -63,7 +63,12 @@ public class Listener extends ListenerAdapter {
           }
         }
       }
-      case "np" -> LOGGER.info(link.getPlayer().getTrackPosition());
+      case "np" -> {
+        StringBuilder sb = new StringBuilder();
+        queues.get(guildId).get().forEach(a -> sb.append("music ").append(a.getIdentifier()).append(" ").append(a.getPosition()).append(" ").append(a.getInfo().title).append("\n"));
+        LOGGER.info(sb.toString());
+        event.getMessage().reply(sb).queue();
+      }
     }
   }
 

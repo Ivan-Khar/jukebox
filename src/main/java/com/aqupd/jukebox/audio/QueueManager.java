@@ -33,12 +33,12 @@ public class QueueManager {
     LOGGER.info(queue.toString());
   }
 
-  public boolean remove(AudioTrack track, VoiceChannel vc) {
+  public boolean remove(AudioTrack track) {
     if(!queue.isEmpty()) return queue.remove(track);
     return false;
   }
 
-  public LinkedList<AudioTrack> get(VoiceChannel vc) {
+  public LinkedList<AudioTrack> get() {
     return queue;
   }
 
