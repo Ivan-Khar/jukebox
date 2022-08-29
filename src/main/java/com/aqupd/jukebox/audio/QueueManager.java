@@ -33,9 +33,12 @@ public class QueueManager {
     LOGGER.info(queue.toString());
   }
 
-  public boolean remove(AudioTrack track) {
-    if(!queue.isEmpty()) return queue.remove(track);
-    return false;
+  public void remove(AudioTrack track) {
+    if(!queue.isEmpty()) queue.remove(track);
+  }
+
+  public void remove(int index) {
+    if(!queue.isEmpty()) queue.remove(index);
   }
 
   public LinkedList<AudioTrack> get() {
@@ -46,8 +49,7 @@ public class QueueManager {
     @Override
     public void onTrackEnd(IPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
       if(!queue.isEmpty()) {
-        player.playTrack(queue.getFirst());
-        queue.removeFirst();
+        player.playTrack(queue.removeFirst());
       }
       super.onTrackEnd(player, track, endReason);
     }
