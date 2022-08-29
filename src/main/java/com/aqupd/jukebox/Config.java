@@ -31,6 +31,7 @@ public class Config {
   public static String getHostPass() { return INSTANCE.HOST_PASS; }
   public static boolean isHostSecure() { return INSTANCE.HOST_SECURE; }
   public static String getPrefix() { return INSTANCE.PREFIX; }
+
   public void load() {
     if (!confFile.exists() || confFile.length() == 0) save();
     try {
