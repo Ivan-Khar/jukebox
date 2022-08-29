@@ -1,5 +1,6 @@
 package com.aqupd.jukebox;
 
+import com.aqupd.jukebox.commands.BasicCommand;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -27,10 +28,13 @@ public class Listener extends ListenerAdapter {
   @Override
   public void onMessageReceived(MessageReceivedEvent event) {
     String message = event.getMessage().getContentDisplay();
-    String[] args = message.split(" ", 2);
-
     if(message.startsWith(getPrefix())) {
+      String[] args = message.split(" ", 2);
+      args[0] = args[0].replace(getPrefix(), "");
       event.getMessage().reply("prefixed message no way!!!").queue();
+      for(BasicCommand command: commandList) {
+        if(command.getName().equals(args[0])) command.execute(event);
+      }
     }
   }
 

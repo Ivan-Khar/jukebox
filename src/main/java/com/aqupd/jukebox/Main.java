@@ -1,6 +1,8 @@
 package com.aqupd.jukebox;
 
 import com.aqupd.jukebox.audio.QueueManager;
+import com.aqupd.jukebox.commands.BasicCommand;
+import com.aqupd.jukebox.commands.music.MusicCommand;
 import lavalink.client.io.jda.JdaLavalink;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Activity;
@@ -9,8 +11,10 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.aqupd.jukebox.Config.*;
 
@@ -47,11 +51,15 @@ public class Main {
   public static HashMap<String, QueueManager> queues = new HashMap<>();
   public static final Logger LOGGER = LogManager.getLogger("Jukebox");
 
+  public static List<BasicCommand> commandList = new ArrayList<>();
+
   public static void main(String[] args) {
     if(!System.getProperty("java.version").contains("18")) {
       LOGGER.info("Для использования данного бота вам нужно использовать Java 18");
     }
     Config.INSTANCE.load();
+
+    commandList.add(new MusicCommand());
 
     try {
       JDABuilder builder = JDABuilder.createDefault(getToken());
