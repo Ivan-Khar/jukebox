@@ -7,7 +7,7 @@ import lavalink.client.player.LavalinkPlayer;
 import lavalink.client.player.event.PlayerEventListenerAdapter;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import static com.aqupd.jukebox.Main.LOGGER;
 import static com.aqupd.jukebox.Main.lavalink;
@@ -20,7 +20,7 @@ public class QueueManager {
     this.guild = guildId;
   }
 
-  private LinkedList<AudioTrack> queue = new LinkedList<>();
+  private ArrayList<AudioTrack> queue = new ArrayList<>();
 
   public void add(AudioTrack track, VoiceChannel vc) {
     LavalinkPlayer player = lavalink.getLink(guild).getPlayer();
@@ -28,7 +28,7 @@ public class QueueManager {
       player.addListener(listener);
       player.playTrack(track);
     } else {
-      queue.addLast(track);
+      queue.add(track);
     }
     LOGGER.info(queue.toString());
   }
@@ -37,11 +37,12 @@ public class QueueManager {
     if(!queue.isEmpty()) queue.remove(track);
   }
 
-  public void remove(int index) {
-    if(!queue.isEmpty()) queue.remove(index);
+  public AudioTrack remove(int index) {
+    if(!queue.isEmpty()) return queue.remove(index);
+    return null;
   }
 
-  public LinkedList<AudioTrack> get() {
+  public ArrayList<AudioTrack> get() {
     return queue;
   }
 
@@ -49,7 +50,7 @@ public class QueueManager {
     @Override
     public void onTrackEnd(IPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
       if(!queue.isEmpty()) {
-        player.playTrack(queue.removeFirst());
+        player.playTrack(queue.remove(0));
       }
       super.onTrackEnd(player, track, endReason);
     }
