@@ -40,11 +40,10 @@ public class Listener extends ListenerAdapter {
     String message = event.getMessage().getContentDisplay();
     String[] args = message.split(" ", 2);
 
-    VoiceChannel vc = jda.getVoiceChannelById(getVC());
+    VoiceChannel vc = jda.getVoiceChannelById(event.getMember().getVoiceState().getChannel().getId());
     String guildId = event.getGuild().getId();
     JdaLink link = lavalink.getLink(vc.getGuild());
     link.connect(vc);
-    IPlayer player = link.getPlayer();
 
     switch (args[0]) {
       case "sht" -> {
@@ -55,12 +54,12 @@ public class Listener extends ListenerAdapter {
       }
       case "play" -> {
         if(event.getMember().getVoiceState().inAudioChannel()) {
-          VoiceChannel playvoice = jda.getVoiceChannelById(event.getMember().getVoiceState().getChannel().getId());
+
           if(queues.containsKey(guildId)) {
-            queues.get(guildId).add(getAudioTrack("ytsearch:" + args[1]).get(0), playvoice);
+            queues.get(guildId).add(getAudioTrack("ytsearch:" + args[1]).get(0), vc);
           } else {
             queues.put(guildId, new QueueManager(guildId));
-            queues.get(guildId).add(getAudioTrack("ytsearch:" + args[1]).get(0), playvoice);
+            queues.get(guildId).add(getAudioTrack("ytsearch:" + args[1]).get(0), vc);
           }
         }
       }
