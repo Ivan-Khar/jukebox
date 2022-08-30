@@ -1,17 +1,18 @@
 package com.aqupd.jukebox.commands.music;
 
-import com.aqupd.jukebox.commands.BasicCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class MusicCommand extends BasicCommand {
-  public MusicCommand() {
+public class PlayCommand extends MusicCategory {
+
+  public PlayCommand() {
     this.name = "play";
     this.help = "plays music";
-    this.category = "music";
+    this.inVoice = true;
+    this.guildOnly = true;
   }
 
   @Override
-  public void execute(MessageReceivedEvent event){
+  public void onCommand(MessageReceivedEvent event) {
     event.getMessage().reply("play command").queue();
   }
 }

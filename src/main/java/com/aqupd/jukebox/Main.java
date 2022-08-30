@@ -2,7 +2,9 @@ package com.aqupd.jukebox;
 
 import com.aqupd.jukebox.audio.QueueManager;
 import com.aqupd.jukebox.commands.BasicCommand;
-import com.aqupd.jukebox.commands.music.MusicCommand;
+import com.aqupd.jukebox.commands.general.HelpCommand;
+import com.aqupd.jukebox.commands.music.PlayCommand;
+import com.aqupd.jukebox.commands.music.StopCommand;
 import lavalink.client.io.jda.JdaLavalink;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Activity;
@@ -11,10 +13,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static com.aqupd.jukebox.Config.*;
 
@@ -59,7 +58,11 @@ public class Main {
     }
     Config.INSTANCE.load();
 
-    commandList.add(new MusicCommand());
+    Collections.addAll(commandList,
+        new HelpCommand(),
+        new PlayCommand(),
+        new StopCommand()
+    );
 
     try {
       JDABuilder builder = JDABuilder.createDefault(getToken());

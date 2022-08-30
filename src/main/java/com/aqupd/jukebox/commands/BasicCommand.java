@@ -3,7 +3,8 @@ package com.aqupd.jukebox.commands;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public abstract class BasicCommand {
-  protected String name; protected String help; protected String category;
+  protected String name = "";
+  protected String help = "";
 
   public String getName() {
     return name;
@@ -13,9 +14,9 @@ public abstract class BasicCommand {
     return help;
   }
 
-  public String getCategory() {
-    return category;
-  }
+  public abstract String getCategory();
 
-  public void execute(MessageReceivedEvent event) {}
+  public abstract void execute(MessageReceivedEvent event);
+
+  public abstract void onCommand(MessageReceivedEvent event);
 }

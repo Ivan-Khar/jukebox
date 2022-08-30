@@ -31,7 +31,6 @@ public class Listener extends ListenerAdapter {
     if(message.startsWith(getPrefix())) {
       String[] args = message.split(" ", 2);
       args[0] = args[0].replace(getPrefix(), "");
-      event.getMessage().reply("prefixed message no way!!!").queue();
       for(BasicCommand command: commandList) {
         if(command.getName().equals(args[0])) command.execute(event);
       }
