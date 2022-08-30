@@ -12,10 +12,12 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.*;
 
 import static com.aqupd.jukebox.Config.*;
+import static com.aqupd.jukebox.ServerConfig.*;
 
 public class Main {
 
@@ -53,10 +55,9 @@ public class Main {
   public static List<BasicCommand> commandList = new ArrayList<>();
 
   public static void main(String[] args) {
-    if(!System.getProperty("java.version").contains("18")) {
-      LOGGER.info("Для использования данного бота вам нужно использовать Java 18");
-    }
+    if(!System.getProperty("java.version").contains("18")) { LOGGER.info("Для использования данного бота вам нужно использовать Java 18"); }
     Config.INSTANCE.load();
+    ServerConfig.INSTANCE.load();
 
     Collections.addAll(commandList,
         new HelpCommand(),

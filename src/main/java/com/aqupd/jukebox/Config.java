@@ -19,6 +19,7 @@ public class Config {
   private String HOST = "lavalink_node_ip";
   private String PORT = "lavalink_node_port";
   private String HOST_PASS = "lavalink_node_password";
+  private String[] OWNERS = {"459442554623098882", "1"};
   private boolean HOST_SECURE = false;
   private String PREFIX = "!!";
 
@@ -31,6 +32,7 @@ public class Config {
   public static String getHostPass() { return INSTANCE.HOST_PASS; }
   public static boolean isHostSecure() { return INSTANCE.HOST_SECURE; }
   public static String getPrefix() { return INSTANCE.PREFIX; }
+  public static String[] getOwners() { return INSTANCE.OWNERS;}
 
   public void load() {
     if (!confFile.exists() || confFile.length() == 0) save();
@@ -44,6 +46,7 @@ public class Config {
       if ((jE = jo.get("host_pass")) != null) HOST_PASS = jE.getAsString();
       if ((jE = jo.get("host_secure")) != null) HOST_SECURE = jE.getAsBoolean();
       if ((jE = jo.get("prefix")) != null) PREFIX = jE.getAsString();
+      if ((jE = jo.get("owners")) != null) OWNERS = gson.fromJson(jE.getAsJsonArray(), String[].class);
       save();
     } catch (FileNotFoundException ex) {
       LOGGER.trace("Conf. file not found (strange)", ex);
@@ -54,7 +57,6 @@ public class Config {
     try {
       if (!confFile.exists()) confFile.createNewFile();
       if (confFile.exists()) {
-
         JsonObject jo = new JsonObject();
         jo.add("token", new JsonPrimitive(TOKEN));
         jo.add("voice_chat", new JsonPrimitive(VC));
@@ -63,6 +65,10 @@ public class Config {
         jo.add("host_pass", new JsonPrimitive(HOST_PASS));
         jo.add("host_secure", new JsonPrimitive(HOST_SECURE));
         jo.add("prefix", new JsonPrimitive(PREFIX));
+
+        JsonArray owners = new JsonArray();
+        for(String owner: OWNERS) { owners.add(owner); }
+        jo.add("owners", owners);
 
         PrintWriter printwriter = new PrintWriter(new FileWriter(confFile));
         printwriter.print(gson.toJson(jo));

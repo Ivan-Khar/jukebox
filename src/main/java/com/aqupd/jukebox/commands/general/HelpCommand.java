@@ -2,6 +2,7 @@ package com.aqupd.jukebox.commands.general;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import static com.aqupd.jukebox.Config.getOwners;
 import static com.aqupd.jukebox.Main.commandList;
 
 public class HelpCommand extends GeneralCategory {
