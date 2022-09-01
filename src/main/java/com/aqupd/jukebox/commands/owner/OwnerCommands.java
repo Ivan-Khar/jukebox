@@ -16,10 +16,10 @@ public abstract class OwnerCommands extends BasicCommand {
 
   @Override
   public void execute(MessageReceivedEvent event) {
-    if(Arrays.asList(getOwners()).contains(event.getAuthor().getName())) {
-      event.getMessage().reply("you are owner");
+    if(Arrays.asList(getOwners()).contains(event.getAuthor().getId())) {
+      onCommand(event);
     } else {
-      event.getMessage().reply("you are not owner");
+      event.getMessage().reply("you cant use this command. L").queue();
     }
   }
 }

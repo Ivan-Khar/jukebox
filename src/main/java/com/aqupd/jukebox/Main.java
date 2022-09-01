@@ -5,6 +5,8 @@ import com.aqupd.jukebox.commands.BasicCommand;
 import com.aqupd.jukebox.commands.general.HelpCommand;
 import com.aqupd.jukebox.commands.music.PlayCommand;
 import com.aqupd.jukebox.commands.music.StopCommand;
+import com.aqupd.jukebox.commands.owner.ShutdownCommand;
+import com.aqupd.jukebox.commands.owner.TestCommand;
 import lavalink.client.io.jda.JdaLavalink;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Activity;
@@ -12,12 +14,10 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.*;
 
 import static com.aqupd.jukebox.Config.*;
-import static com.aqupd.jukebox.ServerConfig.*;
 
 public class Main {
 
@@ -62,17 +62,18 @@ public class Main {
     Collections.addAll(commandList,
         new HelpCommand(),
         new PlayCommand(),
-        new StopCommand()
+        new StopCommand(),
+        new TestCommand(),
+        new ShutdownCommand()
     );
 
     try {
-      JDABuilder builder = JDABuilder.createDefault(getToken());
-      jda = builder
+      jda = JDABuilder.createDefault(getToken())
           .enableIntents(Arrays.asList(INTENTS))
           .setVoiceDispatchInterceptor(lavalink.getVoiceInterceptor())
           .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE, CacheFlag.ONLINE_STATUS)
           .disableCache(CacheFlag.ACTIVITY)
-          .setActivity(Activity.competing("проигрывании"))
+          .setActivity(Activity.competing("a"))
           .setStatus(OnlineStatus.DO_NOT_DISTURB)
           .addEventListeners(lavalink, new Listener())
           .setBulkDeleteSplittingEnabled(true)
