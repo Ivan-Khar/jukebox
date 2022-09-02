@@ -1,6 +1,11 @@
 package com.aqupd.jukebox.commands.music;
 
+import com.aqupd.jukebox.audio.QueueManager;
+import lavalink.client.io.jda.JdaLink;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+
+import static com.aqupd.jukebox.Main.*;
+import static com.aqupd.jukebox.Utils.getQueueForGuild;
 
 public class StopCommand extends MusicCategory {
 
@@ -9,10 +14,15 @@ public class StopCommand extends MusicCategory {
     this.help = "stops music";
     this.inVoice = true;
     this.guildOnly = true;
+    this.playingMusic = true;
   }
 
   @Override
   public void onCommand(MessageReceivedEvent event) {
-    event.getMessage().reply("stop command").queue();
+    JdaLink link = lavaLink.getLink(event.getGuild());
+    QueueManager queue = getQueueForGuild(event.getGuild().getId());
+    queue.clear();
+    link.getPlayer().stopTrack();
+
   }
 }

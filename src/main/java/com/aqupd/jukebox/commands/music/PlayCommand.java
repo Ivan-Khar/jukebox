@@ -1,13 +1,19 @@
 package com.aqupd.jukebox.commands.music;
 
-import com.aqupd.jukebox.Main;
-import com.aqupd.jukebox.Utils;
+import com.aqupd.jukebox.audio.QueueManager;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import kong.unirest.json.JSONObject;
 import lavalink.client.LavalinkUtil;
-import lavalink.client.io.jda.JdaLavalink;
 import lavalink.client.io.jda.JdaLink;
 import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.io.IOException;
+
+import static com.aqupd.jukebox.Main.LOGGER;
+import static com.aqupd.jukebox.Main.lavaLink;
+import static com.aqupd.jukebox.Utils.getAudioTrack;
+import static com.aqupd.jukebox.Utils.getQueueForGuild;
 @SuppressWarnings("ConstantConditions")
 public class PlayCommand extends MusicCategory {
 
@@ -18,18 +24,47 @@ public class PlayCommand extends MusicCategory {
     this.guildOnly = true;
   }
 
-  JdaLavalink lavalink = Main.lavalink;
   @Override
   public void onCommand(MessageReceivedEvent event) {
-    event.getMessage().reply("play command").queue();
-    JdaLink link = lavalink.getLink(event.getGuild());
+    JdaLink link = lavaLink.getLink(event.getGuild());
     LavalinkPlayer player = link.getPlayer();
     String[] command = event.getMessage().getContentDisplay().split(" ", 2);
-    if(command[1].isEmpty()) {
+    if(command.length == 1) {
       event.getMessage().reply("you need to type music url/name").queue();
       return;
     }
+
+    QueueManager queue = getQueueForGuild(event.getGuild().getId());
+
     link.connect(event.getMember().getVoiceState().getChannel());
-    player.playTrack(Utils.getAudioTrack(command[1]).get(0));
+    JSONObject results = getAudioTrack(command[1]);
+    switch(results.getString("loadType")) {
+      case "NO_MATCHES" -> event.getMessage().reply("Nothing found").queue();
+      case "SEARCH_RESULT" -> {
+        try {
+          AudioTrack track = LavalinkUtil.toAudioTrack(results.getJSONArray("tracks").getJSONObject(0).getString("track"));
+          queue.add(track);
+          event.getMessage().reply(String.format("playing track %s", track.getInfo().title)).queue();
+        } catch(IOException e) {
+          event.getMessage().reply("Couldn't get track info").queue();
+          LOGGER.error("Retrieving Audio Info error", e);
+        }
+      }
+      case "PLAYLIST_LOADED" -> {
+        results.getJSONArray("tracks").forEach(jo -> {
+          try {
+            JSONObject trackInfo = ((JSONObject) jo);
+            AudioTrack track = LavalinkUtil.toAudioTrack(trackInfo.getString("track"));
+            queue.add(track);
+          } catch(IOException e) {
+            event.getMessage().reply("Couldn't get track info").queue();
+            LOGGER.error("Retrieving Audio Info error", e);
+          }
+        });
+        String playlistName = results.getJSONObject("playlistInfo").getString("name");
+        int playlistCount = results.getJSONArray("tracks").length();
+        event.getMessage().reply(String.format("Playing playlist %s with %d entries", playlistName, playlistCount)).queue();
+      }
+    }
   }
 }

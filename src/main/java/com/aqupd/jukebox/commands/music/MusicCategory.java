@@ -25,7 +25,7 @@ public abstract class MusicCategory extends BasicCommand {
       event.getMessage().reply("You need to be in a voice channel in order to use this command!").queue();
       return;
     }
-    if(playingMusic && lavalink.getExistingLink(event.getGuild()) != null && lavalink.getExistingLink(event.getGuild()).getPlayer().getPlayingTrack() != null) {
+    if(playingMusic && lavaLink.getExistingLink(event.getGuild()) != null && lavaLink.getExistingLink(event.getGuild()).getPlayer().getPlayingTrack() == null) {
       event.getMessage().reply("You need to listen to music in order to use this command!").queue();
       return;
     }

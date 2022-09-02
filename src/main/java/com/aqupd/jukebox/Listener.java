@@ -20,9 +20,9 @@ import static com.aqupd.jukebox.ServerConfig.*;
 public class Listener extends ListenerAdapter {
   @Override
   public void onReady(@Nonnull ReadyEvent event) {
-    lavalink.setUserId(event.getJDA().getSelfUser().getId());
+    lavaLink.setUserId(event.getJDA().getSelfUser().getId());
     try {
-      lavalink.addNode(new URI("ws://" + getHost() + ":" + getPort()), getHostPass());
+      lavaLink.addNode(new URI("ws://" + getHost() + ":" + getPort()), getHostPass());
     } catch (URISyntaxException e) {
       LOGGER.error("error while parsing host URI", e);
     }

@@ -4,6 +4,7 @@ import com.aqupd.jukebox.audio.QueueManager;
 import com.aqupd.jukebox.commands.BasicCommand;
 import com.aqupd.jukebox.commands.general.HelpCommand;
 import com.aqupd.jukebox.commands.music.PlayCommand;
+import com.aqupd.jukebox.commands.music.SkipCommand;
 import com.aqupd.jukebox.commands.music.StopCommand;
 import com.aqupd.jukebox.commands.owner.ShutdownCommand;
 import com.aqupd.jukebox.commands.owner.TestCommand;
@@ -48,7 +49,7 @@ public class Main {
   };
 
   public static JDA jda;
-  public static JdaLavalink lavalink = new JdaLavalink(1, (a) -> jda);
+  public static JdaLavalink lavaLink = new JdaLavalink(1, (a) -> jda);
   public static HashMap<String, QueueManager> queues = new HashMap<>();
   public static final Logger LOGGER = LogManager.getLogger("Jukebox");
 
@@ -63,6 +64,7 @@ public class Main {
         new HelpCommand(),
         new PlayCommand(),
         new StopCommand(),
+        new SkipCommand(),
         new TestCommand(),
         new ShutdownCommand()
     );
@@ -70,12 +72,12 @@ public class Main {
     try {
       jda = JDABuilder.createDefault(getToken())
           .enableIntents(Arrays.asList(INTENTS))
-          .setVoiceDispatchInterceptor(lavalink.getVoiceInterceptor())
+          .setVoiceDispatchInterceptor(lavaLink.getVoiceInterceptor())
           .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE, CacheFlag.ONLINE_STATUS)
           .disableCache(CacheFlag.ACTIVITY)
           .setActivity(Activity.competing("a"))
           .setStatus(OnlineStatus.DO_NOT_DISTURB)
-          .addEventListeners(lavalink, new Listener())
+          .addEventListeners(lavaLink, new Listener())
           .setBulkDeleteSplittingEnabled(true)
           .build();
 

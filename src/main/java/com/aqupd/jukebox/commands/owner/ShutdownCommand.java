@@ -1,9 +1,8 @@
 package com.aqupd.jukebox.commands.owner;
 
-import com.aqupd.jukebox.Main;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.util.concurrent.TimeUnit;
+import static com.aqupd.jukebox.Main.*;
 
 public class ShutdownCommand extends OwnerCommands {
 
@@ -14,11 +13,9 @@ public class ShutdownCommand extends OwnerCommands {
 
   @Override
   public void onCommand(MessageReceivedEvent event) {
-    event.getMessage().reply("Goodbye!").delay(1, TimeUnit.SECONDS).flatMap(f -> {
-      Main.lavalink.shutdown();
-      Main.jda.shutdown();
-      System.exit(0);
-      return null;
-    }).queue();
+    event.getMessage().reply("Goodbye!").complete();
+    lavaLink.shutdown();
+    jda.shutdown();
+    System.exit(0);
   }
 }
