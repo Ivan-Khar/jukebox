@@ -3,6 +3,8 @@ package com.aqupd.jukebox;
 import com.google.gson.*;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.aqupd.jukebox.Main.LOGGER;
 
@@ -19,7 +21,7 @@ public class Config {
   private String HOST = "lavalink_node_ip";
   private String PORT = "lavalink_node_port";
   private String HOST_PASS = "lavalink_node_password";
-  private String[] OWNERS = {"459442554623098882", "1"};
+  private List<String> OWNERS = new ArrayList<>() {{add("459442554623098882"); add("1");}};
   private boolean HOST_SECURE = false;
   private String PREFIX = "!!";
 
@@ -32,7 +34,7 @@ public class Config {
   public static String getHostPass() { return INSTANCE.HOST_PASS; }
   public static boolean isHostSecure() { return INSTANCE.HOST_SECURE; }
   public static String getPrefix() { return INSTANCE.PREFIX; }
-  public static String[] getOwners() { return INSTANCE.OWNERS;}
+  public static List<String> getOwners() { return INSTANCE.OWNERS;}
 
   public void load() {
     if (!confFile.exists() || confFile.length() == 0) save();
@@ -46,7 +48,11 @@ public class Config {
       if ((jE = jo.get("host_pass")) != null) HOST_PASS = jE.getAsString();
       if ((jE = jo.get("host_secure")) != null) HOST_SECURE = jE.getAsBoolean();
       if ((jE = jo.get("prefix")) != null) PREFIX = jE.getAsString();
-      if ((jE = jo.get("owners")) != null) OWNERS = gson.fromJson(jE.getAsJsonArray(), String[].class);
+      if ((jE = jo.get("owners")) != null) {
+        List<String> newOWNERS = new ArrayList<>();
+        jE.getAsJsonArray().forEach(bl -> newOWNERS.add(bl.getAsString().toLowerCase()));
+        OWNERS = newOWNERS;
+      }
       save();
     } catch (FileNotFoundException ex) {
       LOGGER.trace("Conf. file not found (strange)", ex);

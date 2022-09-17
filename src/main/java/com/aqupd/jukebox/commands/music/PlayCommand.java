@@ -40,7 +40,7 @@ public class PlayCommand extends MusicCategory {
     JSONObject results = getAudioTrack(command[1]);
     switch(results.getString("loadType")) {
       case "NO_MATCHES" -> event.getMessage().reply("Nothing found").queue();
-      case "SEARCH_RESULT" -> {
+      case "SEARCH_RESULT", "TRACK_LOADED" -> {
         try {
           AudioTrack track = LavalinkUtil.toAudioTrack(results.getJSONArray("tracks").getJSONObject(0).getString("track"));
           queue.add(track);
@@ -58,12 +58,17 @@ public class PlayCommand extends MusicCategory {
             queue.add(track);
           } catch(IOException e) {
             event.getMessage().reply("Couldn't get track info").queue();
-            LOGGER.error("Retrieving Audio Info error", e);
+            LOGGER.error("Retrieving audio info error", e);
           }
         });
         String playlistName = results.getJSONObject("playlistInfo").getString("name");
         int playlistCount = results.getJSONArray("tracks").length();
         event.getMessage().reply(String.format("Playing playlist %s with %d entries", playlistName, playlistCount)).queue();
+      }
+      case "LOAD_FAILED" -> {
+        String exception = results.getJSONObject("exception").getString("message");
+        event.getMessage().reply(String.format("Couldn't play this audio track. %s", exception)).queue();
+        LOGGER.error(String.format("got error while trying to play audio track in guild \"%s\". arg: \"%s\", error: \"%s\"", event.getGuild().getId(), command[1], exception));
       }
     }
   }
