@@ -10,7 +10,7 @@ public class SkipCommand extends MusicCategory {
 
   public SkipCommand() {
     this.name = "skip";
-    this.help = "skips music";
+    this.help = "skips current music";
     this.inVoice = true;
     this.guildOnly = true;
     this.playingMusic = true;

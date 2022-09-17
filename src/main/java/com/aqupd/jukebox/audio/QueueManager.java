@@ -32,19 +32,6 @@ public class QueueManager {
     LOGGER.info(queue.toString());
   }
 
-  public void clear() {
-    queue.clear();
-  }
-
-  public void remove(AudioTrack track) {
-    if(!queue.isEmpty()) queue.remove(track);
-  }
-
-  public AudioTrack remove(int index) {
-    if(!queue.isEmpty()) return queue.remove(index);
-    return null;
-  }
-
   public ArrayList<AudioTrack> get() {
     return queue;
   }

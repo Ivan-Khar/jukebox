@@ -21,8 +21,8 @@ public class StopCommand extends MusicCategory {
   public void onCommand(MessageReceivedEvent event) {
     JdaLink link = lavaLink.getLink(event.getGuild());
     QueueManager queue = getQueueForGuild(event.getGuild().getId());
-    queue.clear();
+    queue.get().clear();
     link.getPlayer().stopTrack();
-
+    event.getMessage().reply("Cleared the queue and left the voice chat").queue();
   }
 }

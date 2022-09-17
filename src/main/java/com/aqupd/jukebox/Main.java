@@ -4,6 +4,7 @@ import com.aqupd.jukebox.audio.QueueManager;
 import com.aqupd.jukebox.commands.BasicCommand;
 import com.aqupd.jukebox.commands.general.HelpCommand;
 import com.aqupd.jukebox.commands.music.PlayCommand;
+import com.aqupd.jukebox.commands.music.RemoveCommand;
 import com.aqupd.jukebox.commands.music.SkipCommand;
 import com.aqupd.jukebox.commands.music.StopCommand;
 import com.aqupd.jukebox.commands.owner.ShutdownCommand;
@@ -61,14 +62,23 @@ public class Main {
     ServerConfig.INSTANCE.load();
 
     Collections.addAll(commandList,
+        //General commands
         new HelpCommand(),
+
+        //Music commands
         new PlayCommand(),
         new StopCommand(),
         new SkipCommand(),
+        new RemoveCommand(),
+
+        //Owner commands
         new TestCommand(),
         new ShutdownCommand()
     );
-
+    if(commandList.stream().anyMatch(command -> command.getName() == null || command.getCategory() == null || command.getHelp() == null)) {
+      LOGGER.info("Некоторые команды не имеют названия/категории/помощи");
+      System.exit(0);
+    }
     try {
       jda = JDABuilder.createDefault(getToken())
           .enableIntents(Arrays.asList(INTENTS))
