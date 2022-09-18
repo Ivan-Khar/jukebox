@@ -24,7 +24,7 @@ public class RemoveCommand extends MusicCategory {
     AudioTrack track;
     if(command.length == 1) {
       track = queue.get().remove(0);
-      event.getMessage().reply(String.format("skipped track %s", track.getInfo().title)).queue();
+      event.getMessage().reply(String.format("skipped track %1$s", track.getInfo().title)).queue();
     } else {
       int removetrack;
       try {
@@ -35,7 +35,7 @@ public class RemoveCommand extends MusicCategory {
       }
       if(removetrack <= queue.get().size() && removetrack > 0) {
         track = queue.get().remove(removetrack-1);
-        event.getMessage().reply(String.format("skipped track %s", track.getInfo().title)).queue();
+        event.getMessage().reply(String.format("skipped track %1$s", track.getInfo().title)).queue();
       } else {
         event.getMessage().reply("you need to type number from 1 to " + queue.get().size()).queue();
       }

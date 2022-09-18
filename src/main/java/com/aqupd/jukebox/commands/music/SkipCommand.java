@@ -22,7 +22,7 @@ public class SkipCommand extends MusicCategory {
     LavalinkPlayer player = link.getPlayer();
     //String[] command = event.getMessage().getContentDisplay().split(" ", 2);
     String musicName = link.getPlayer().getPlayingTrack().getInfo().title;
-    event.getMessage().reply(String.format("skipped track %s", musicName)).queue();
+    event.getMessage().reply(String.format("skipped track %1$s", musicName)).queue();
     link.getPlayer().stopTrack();
   }
 }

@@ -3,6 +3,7 @@ package com.aqupd.jukebox;
 import com.aqupd.jukebox.audio.QueueManager;
 import com.aqupd.jukebox.commands.BasicCommand;
 import com.aqupd.jukebox.commands.general.HelpCommand;
+import com.aqupd.jukebox.commands.general.PingCommand;
 import com.aqupd.jukebox.commands.music.PlayCommand;
 import com.aqupd.jukebox.commands.music.RemoveCommand;
 import com.aqupd.jukebox.commands.music.SkipCommand;
@@ -64,6 +65,7 @@ public class Main {
     Collections.addAll(commandList,
         //General commands
         new HelpCommand(),
+        new PingCommand(),
 
         //Music commands
         new PlayCommand(),
