@@ -28,8 +28,8 @@ public class ListCommand extends MusicCategory {
       AudioTrack currentPlaying = lavaLink.getLink(event.getGuild()).getPlayer().getPlayingTrack();
       HashMap<Integer, List<AudioTrack>> paginatedList = new HashMap<>();
 
-      int tracknum = 1;
-      int pagenum = 1;
+      int tracknum = 0;
+      int pagenum = 0;
       for (AudioTrack track: tracks) {
         if(tracknum % 10 == 0) pagenum++;
         if(!paginatedList.containsKey(pagenum)) paginatedList.put(pagenum, new ArrayList<>());
