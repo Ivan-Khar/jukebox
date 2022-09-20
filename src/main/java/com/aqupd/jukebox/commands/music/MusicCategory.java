@@ -9,6 +9,7 @@ public abstract class MusicCategory extends BasicCommand {
   protected boolean inVoice = false;
   protected boolean guildOnly = false;
   protected boolean playingMusic = false;
+  protected boolean hasQueue = false;
 
   @Override
   public String getCategory() {
@@ -27,6 +28,10 @@ public abstract class MusicCategory extends BasicCommand {
     }
     if(playingMusic && lavaLink.getExistingLink(event.getGuild()) != null && lavaLink.getExistingLink(event.getGuild()).getPlayer().getPlayingTrack() == null) {
       event.getMessage().reply("You need to listen to music in order to use this command!").queue();
+      return;
+    }
+    if(hasQueue && !queues.containsKey(event.getGuild().getId())) {
+      event.getMessage().reply("Queue is empty").queue();
       return;
     }
     //other checks

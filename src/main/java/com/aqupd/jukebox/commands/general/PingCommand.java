@@ -15,7 +15,7 @@ public class PingCommand extends GeneralCategory {
 
     StringBuilder sb = new StringBuilder();
     //sb.append(String.format("Ping to lavalink node: %1$dms\n", ping));
-    sb.append("Pong!");
+    sb.append("pong!");
     event.getMessage().reply(sb).queue();
   }
 }

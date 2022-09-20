@@ -2,25 +2,28 @@ package com.aqupd.jukebox;
 
 import com.aqupd.jukebox.audio.QueueManager;
 import com.aqupd.jukebox.commands.BasicCommand;
+import com.aqupd.jukebox.commands.general.AboutCommand;
 import com.aqupd.jukebox.commands.general.HelpCommand;
 import com.aqupd.jukebox.commands.general.PingCommand;
-import com.aqupd.jukebox.commands.music.PlayCommand;
-import com.aqupd.jukebox.commands.music.RemoveCommand;
-import com.aqupd.jukebox.commands.music.SkipCommand;
-import com.aqupd.jukebox.commands.music.StopCommand;
+import com.aqupd.jukebox.commands.music.*;
 import com.aqupd.jukebox.commands.owner.ShutdownCommand;
 import com.aqupd.jukebox.commands.owner.TestCommand;
 import lavalink.client.io.jda.JdaLavalink;
-import net.dv8tion.jda.api.*;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
-import static com.aqupd.jukebox.Config.*;
+import static com.aqupd.jukebox.Config.getToken;
 
 public class Main {
 
@@ -66,12 +69,14 @@ public class Main {
         //General commands
         new HelpCommand(),
         new PingCommand(),
+        new AboutCommand(),
 
         //Music commands
         new PlayCommand(),
         new StopCommand(),
         new SkipCommand(),
         new RemoveCommand(),
+        new ListCommand(),
 
         //Owner commands
         new TestCommand(),
@@ -85,6 +90,8 @@ public class Main {
       jda = JDABuilder.createDefault(getToken())
           .enableIntents(Arrays.asList(INTENTS))
           .setVoiceDispatchInterceptor(lavaLink.getVoiceInterceptor())
+          .setMemberCachePolicy(MemberCachePolicy.ALL)
+          .setChunkingFilter(ChunkingFilter.ALL)
           .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE, CacheFlag.ONLINE_STATUS)
           .disableCache(CacheFlag.ACTIVITY)
           .setActivity(Activity.competing("a"))

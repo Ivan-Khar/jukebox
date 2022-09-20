@@ -8,8 +8,7 @@ import lavalink.client.player.event.PlayerEventListenerAdapter;
 
 import java.util.ArrayList;
 
-import static com.aqupd.jukebox.Main.LOGGER;
-import static com.aqupd.jukebox.Main.lavaLink;
+import static com.aqupd.jukebox.Main.*;
 
 public class QueueManager {
 
@@ -29,7 +28,6 @@ public class QueueManager {
     } else {
       queue.add(track);
     }
-    LOGGER.info(queue.toString());
   }
 
   public ArrayList<AudioTrack> get() {
@@ -40,7 +38,10 @@ public class QueueManager {
     @Override
     public void onTrackEnd(IPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
       if(!queue.isEmpty()) player.playTrack(queue.remove(0));
-      else lavaLink.getLink(guild).destroy();
+      else {
+        lavaLink.getLink(guild).destroy();
+        queues.remove(guild);
+      }
 
       super.onTrackEnd(player, track, endReason);
     }
