@@ -12,9 +12,7 @@ import javax.annotation.Nonnull;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static com.aqupd.jukebox.Config.*;
 import static com.aqupd.jukebox.Main.*;
-import static com.aqupd.jukebox.ServerConfig.*;
 
 @SuppressWarnings("SameParameterValue")
 public class Listener extends ListenerAdapter {
@@ -22,7 +20,7 @@ public class Listener extends ListenerAdapter {
   public void onReady(@Nonnull ReadyEvent event) {
     lavaLink.setUserId(event.getJDA().getSelfUser().getId());
     try {
-      lavaLink.addNode(new URI("ws://" + getHost() + ":" + getPort()), getHostPass());
+      lavaLink.addNode(new URI("ws://" + config.getHost() + ":" + config.getPort()), config.getHostPass());
     } catch (URISyntaxException e) {
       LOGGER.error("error while parsing host URI", e);
     }
@@ -31,9 +29,9 @@ public class Listener extends ListenerAdapter {
   @Override
   public void onMessageReceived(MessageReceivedEvent event) {
     String message = event.getMessage().getContentDisplay();
-    if(message.startsWith(getPrefix())) {
+    if(message.startsWith(config.getPrefix())) {
       String[] args = message.split(" ", 2);
-      args[0] = args[0].replace(getPrefix(), "");
+      args[0] = args[0].replace(config.getPrefix(), "");
       for(BasicCommand command: commandList) {
         if(command.getName().equals(args[0])) command.execute(event);
       }
@@ -42,7 +40,7 @@ public class Listener extends ListenerAdapter {
 
   @Override
   public void onGuildJoin(@NotNull GuildJoinEvent event) {
-    if(getGuildSetting(event.getGuild().getId(), "lang") == null) setGuildSetting(event.getGuild().getId(), "lang", "en");
+    if(serverConfig.getGuildSetting(event.getGuild().getId(), "lang") == null) serverConfig.setGuildSetting(event.getGuild().getId(), "lang", "en");
   }
 
   @Override

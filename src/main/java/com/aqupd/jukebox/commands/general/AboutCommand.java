@@ -6,9 +6,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import java.awt.*;
 import java.time.Instant;
 
-import static com.aqupd.jukebox.Main.jda;
-import static com.aqupd.jukebox.Main.lavaLink;
-import static com.aqupd.jukebox.Utils.humanReadableByteCountBin;
+import static com.aqupd.jukebox.Main.*;
 
 public class AboutCommand extends GeneralCategory {
 
@@ -19,7 +17,7 @@ public class AboutCommand extends GeneralCategory {
 
   @Override
   public void onCommand(MessageReceivedEvent event) {
-    String usedMem = humanReadableByteCountBin(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
+    String usedMem = utils.humanReadableByteCountBin(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
 
 
     String stats1 = String.format("**%1$d** guilds\n**%2$s** ram", jda.getGuilds().size(), usedMem);
@@ -42,7 +40,7 @@ public class AboutCommand extends GeneralCategory {
         .addField("**Channels**", stats3, true);
 
     if(lavaLink.getNodes().get(0).getStats() != null) {
-      String lavalinkUsedMem = humanReadableByteCountBin(lavaLink.getNodes().get(0).getStats().getMemFree());
+      String lavalinkUsedMem = utils.humanReadableByteCountBin(lavaLink.getNodes().get(0).getStats().getMemFree());
       String stats4 = String.format("**%1$,.2f**%% cpu\n**%2$s** ram", lavaLink.getNodes().get(0).getStats().getSystemLoad(), lavalinkUsedMem);
       builder.addField("**Lavalink node**", stats4, true);
     }

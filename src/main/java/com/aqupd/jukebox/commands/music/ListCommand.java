@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.aqupd.jukebox.Main.*;
-import static com.aqupd.jukebox.Utils.*;
 
 public class ListCommand extends MusicCategory {
 
@@ -38,7 +37,7 @@ public class ListCommand extends MusicCategory {
 
     event.getMessage().reply("Loading...").addActionRow(buttons).queue(message -> {
       List<AudioTrack> tracks = queues.get(event.getGuild().getId()).get();
-      HashMap<Integer, List<AudioTrack>> paginatedList = getPaginatedListOfTracks(tracks, 10);
+      HashMap<Integer, List<AudioTrack>> paginatedList = utils.getPaginatedListOfTracks(tracks, 10);
       final int[] page = {1};
       updateMessage(event.getGuild(), message, page[0], paginatedList);
 
@@ -74,7 +73,7 @@ public class ListCommand extends MusicCategory {
 
   private void updateMessage(Guild guild, Message message, Integer page, HashMap<Integer, List<AudioTrack>> paginatedList) {
     EmbedBuilder builder = new EmbedBuilder();
-    builder.setDescription(getTrackPage(paginatedList.get(page), page, 10));
+    builder.setDescription(utils.getTrackPage(paginatedList.get(page), page, 10));
     builder.setFooter("Page " + page + "/" + paginatedList.size());
     message.editMessageEmbeds(builder.build()).queue(response -> {
       String header = headerBuilder(guild);
@@ -85,6 +84,6 @@ public class ListCommand extends MusicCategory {
 
   private String headerBuilder(Guild guild) {
     AudioTrack currentPlaying = lavaLink.getLink(guild).getPlayer().getPlayingTrack();
-    return String.format("Playing: %s", getTrackWithTime(currentPlaying));
+    return String.format("Playing: %s", utils.getTrackWithTime(currentPlaying));
   }
 }

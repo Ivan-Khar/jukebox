@@ -3,7 +3,7 @@ package com.aqupd.jukebox.commands.owner;
 import com.aqupd.jukebox.commands.BasicCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import static com.aqupd.jukebox.Config.getOwners;
+import static com.aqupd.jukebox.Main.config;
 
 public abstract class OwnerCommands extends BasicCommand {
 
@@ -14,7 +14,7 @@ public abstract class OwnerCommands extends BasicCommand {
 
   @Override
   public void execute(MessageReceivedEvent event) {
-    if(getOwners().contains(event.getAuthor().getId())) {
+    if(config.getOwners().contains(event.getAuthor().getId())) {
       onCommand(event);
     } else {
       event.getMessage().reply("you cant use this command. L").queue();

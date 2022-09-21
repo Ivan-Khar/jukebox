@@ -11,24 +11,24 @@ import static com.aqupd.jukebox.Main.LOGGER;
 
 public class ServerConfig {
 
-  private ServerConfig() {}
-  public static final ServerConfig INSTANCE = new ServerConfig();
+  public ServerConfig() {}
+
   Gson gson = new GsonBuilder().setPrettyPrinting().create();
   private final File confFile = new File("./serversettings.json");
   private JsonObject settings = new JsonObject();
 
-  public static String getGuildSetting(String guildId, String setting) {
+  public String getGuildSetting(String guildId, String setting) {
     try {
-      return INSTANCE.settings.get(guildId).getAsJsonObject().get(setting).getAsString();
+      return settings.get(guildId).getAsJsonObject().get(setting).getAsString();
     } catch(NullPointerException ex) {
       return null;
     }
   }
 
-  public static void setGuildSetting(String guildId, String setting, String value) {
-    if(!INSTANCE.settings.has(guildId)) INSTANCE.settings.add(guildId, new JsonObject());
-    INSTANCE.settings.get(guildId).getAsJsonObject().add(setting, new JsonPrimitive(value));
-    INSTANCE.save();
+  public void setGuildSetting(String guildId, String setting, String value) {
+    if(!settings.has(guildId)) settings.add(guildId, new JsonObject());
+    settings.get(guildId).getAsJsonObject().add(setting, new JsonPrimitive(value));
+    save();
   }
 
   public void load() {

@@ -4,7 +4,7 @@ import com.aqupd.jukebox.audio.QueueManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import static com.aqupd.jukebox.Utils.getQueueForGuild;
+import static com.aqupd.jukebox.Main.utils;
 
 public class RemoveCommand extends MusicCategory {
 
@@ -20,7 +20,7 @@ public class RemoveCommand extends MusicCategory {
   @Override
   public void onCommand(MessageReceivedEvent event) {
     String[] command = event.getMessage().getContentDisplay().split(" ", 2);
-    QueueManager queue = getQueueForGuild(event.getGuild().getId());
+    QueueManager queue = utils.getQueueForGuild(event.getGuild().getId());
     AudioTrack track;
     if(command.length == 1) {
       track = queue.get().remove(0);

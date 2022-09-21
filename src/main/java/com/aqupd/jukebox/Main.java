@@ -24,8 +24,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
-import static com.aqupd.jukebox.Config.getToken;
-
 public class Main {
 
   public static final Permission[] RECOMMENDED_PERMS = {
@@ -59,13 +57,15 @@ public class Main {
   public static EventWaiter waiter = new EventWaiter();
   public static HashMap<String, QueueManager> queues = new HashMap<>();
   public static final Logger LOGGER = LogManager.getLogger("Jukebox");
-
+  public static Config config = new Config();
+  public static ServerConfig serverConfig = new ServerConfig();
+  public static Utils utils = new Utils();
   public static List<BasicCommand> commandList = new ArrayList<>();
 
   public static void main(String[] args) {
     if(!System.getProperty("java.version").contains("18")) { LOGGER.info("Для использования данного бота вам нужно использовать Java 18"); }
-    Config.INSTANCE.load();
-    ServerConfig.INSTANCE.load();
+    config.load();
+    serverConfig.load();
 
     Collections.addAll(commandList,
         //General commands
@@ -89,7 +89,7 @@ public class Main {
       System.exit(0);
     }
     try {
-      jda = JDABuilder.createDefault(getToken())
+      jda = JDABuilder.createDefault(config.getToken())
           .enableIntents(Arrays.asList(INTENTS))
           .setVoiceDispatchInterceptor(lavaLink.getVoiceInterceptor())
           .setMemberCachePolicy(MemberCachePolicy.ALL)

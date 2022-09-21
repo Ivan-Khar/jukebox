@@ -11,8 +11,7 @@ import static com.aqupd.jukebox.Main.LOGGER;
 @SuppressWarnings({"FieldMayBeFinal", "ResultOfMethodCallIgnored", "FieldCanBeLocal", "unused"})
 public class Config {
 
-  private Config() {}
-  public static final Config INSTANCE = new Config();
+  public Config() {}
 
   Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -27,14 +26,14 @@ public class Config {
 
   private final File confFile = new File("./config.json");
 
-  public static String getToken() { return INSTANCE.TOKEN; }
-  public static long getVC() { return INSTANCE.VC; }
-  public static String getHost() { return INSTANCE.HOST; }
-  public static String getPort() { return INSTANCE.PORT; }
-  public static String getHostPass() { return INSTANCE.HOST_PASS; }
-  public static boolean isHostSecure() { return INSTANCE.HOST_SECURE; }
-  public static String getPrefix() { return INSTANCE.PREFIX; }
-  public static List<String> getOwners() { return INSTANCE.OWNERS;}
+  public String getToken() { return TOKEN; }
+  public long getVC() { return VC; }
+  public String getHost() { return HOST; }
+  public String getPort() { return PORT; }
+  public String getHostPass() { return HOST_PASS; }
+  public boolean isHostSecure() { return HOST_SECURE; }
+  public String getPrefix() { return PREFIX; }
+  public List<String> getOwners() { return OWNERS;}
 
   public void load() {
     if (!confFile.exists() || confFile.length() == 0) save();

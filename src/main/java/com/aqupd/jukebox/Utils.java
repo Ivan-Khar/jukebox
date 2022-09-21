@@ -11,34 +11,34 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.aqupd.jukebox.Config.*;
-import static com.aqupd.jukebox.Main.LOGGER;
-import static com.aqupd.jukebox.Main.queues;
+import static com.aqupd.jukebox.Main.*;
 
 public class Utils {
 
-  public static JSONObject getAudioTrack(String track) {
-    JSONObject UnirestJsonObject = Unirest.get("http" + (isHostSecure()?"s":"") + "://" + getHost() + ":" + getPort() + "/loadtracks?identifier=" + track)
-        .header("Authorization", getHostPass()).asJson().getBody().getObject();
+  public Utils() {}
+
+  public JSONObject getAudioTrack(String track) {
+    JSONObject UnirestJsonObject = Unirest.get("http" + (config.isHostSecure()?"s":"") + "://" + config.getHost() + ":" + config.getPort() + "/loadtracks?identifier=" + track)
+        .header("Authorization", config.getHostPass()).asJson().getBody().getObject();
     LOGGER.info("first search: \n" + UnirestJsonObject.toString());
 
     if(UnirestJsonObject.getJSONArray("tracks").isEmpty()) {
-      UnirestJsonObject = Unirest.get("http" + (isHostSecure()?"s":"") + "://" + getHost() + ":" + getPort() + "/loadtracks?identifier=ytsearch:" + track)
-          .header("Authorization", getHostPass()).asJson().getBody().getObject();
+      UnirestJsonObject = Unirest.get("http" + (config.isHostSecure()?"s":"") + "://" + config.getHost() + ":" + config.getPort() + "/loadtracks?identifier=ytsearch:" + track)
+          .header("Authorization", config.getHostPass()).asJson().getBody().getObject();
       LOGGER.info("second search: \n" + UnirestJsonObject.toString());
     }
 
     return UnirestJsonObject;
   }
 
-  public static QueueManager getQueueForGuild(String guildId) {
+  public QueueManager getQueueForGuild(String guildId) {
     if (!queues.containsKey(guildId)) {
       queues.put(guildId, new QueueManager(guildId));
     }
     return queues.get(guildId);
   }
 
-  public static String humanReadableByteCountBin(long bytes) {
+  public String humanReadableByteCountBin(long bytes) {
     long absB = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);
     if (absB < 1024) {
       return bytes + " B";
@@ -53,7 +53,7 @@ public class Utils {
     return String.format("%.1f %ciB", value / 1024.0, ci.current());
   }
 
-  public static String getTimeFromMS(long ms) {
+  private String getTimeFromMS(long ms) {
     int mil     = (int) ms % 1000;
     int seconds = (int) (ms / 1000) % 60 ;
     int minutes = (int) ((ms / (1000*60)) % 60);
@@ -66,15 +66,15 @@ public class Utils {
     return time;
   }
 
-  public static String getTrackWithTime(AudioTrack track) {
+  public String getTrackWithTime(AudioTrack track) {
     return "`[" + getTimeFromMS(track.getInfo().length) + "]` **" + track.getInfo().title + " - " + track.getInfo().author + "**";
   }
 
-  public static String getTrackWithTimeAndURI(AudioTrack track) {
+  public String getTrackWithTimeAndURI(AudioTrack track) {
     return "`[" + getTimeFromMS(track.getInfo().length) + "]` [**" + track.getInfo().title + " - " + track.getInfo().author + "**](" + track.getInfo().uri + ")";
   }
 
-  public static HashMap<Integer, List<AudioTrack>> getPaginatedListOfTracks(List<AudioTrack> tracks, Integer numOfTracks) {
+  public HashMap<Integer, List<AudioTrack>> getPaginatedListOfTracks(List<AudioTrack> tracks, Integer numOfTracks) {
     HashMap<Integer, List<AudioTrack>> paginatedList = new HashMap<>();
     int tracknum = 0; int pagenum = 0;
     for (AudioTrack track: tracks) {
@@ -86,7 +86,7 @@ public class Utils {
     return paginatedList;
   }
 
-  public static String getTrackPage(List<AudioTrack> tracks, Integer page, Integer pageTracksNumber) {
+  public String getTrackPage(List<AudioTrack> tracks, Integer page, Integer pageTracksNumber) {
     StringBuilder sb = new StringBuilder();
     int tracknum = pageTracksNumber * (page-1);
     for (AudioTrack track: tracks) {

@@ -10,10 +10,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.IOException;
 
-import static com.aqupd.jukebox.Main.LOGGER;
-import static com.aqupd.jukebox.Main.lavaLink;
-import static com.aqupd.jukebox.Utils.getAudioTrack;
-import static com.aqupd.jukebox.Utils.getQueueForGuild;
+import static com.aqupd.jukebox.Main.*;
+
 @SuppressWarnings("ConstantConditions")
 public class PlayCommand extends MusicCategory {
 
@@ -34,10 +32,10 @@ public class PlayCommand extends MusicCategory {
       return;
     }
 
-    QueueManager queue = getQueueForGuild(event.getGuild().getId());
+    QueueManager queue = utils.getQueueForGuild(event.getGuild().getId());
 
     link.connect(event.getMember().getVoiceState().getChannel());
-    JSONObject results = getAudioTrack(command[1]);
+    JSONObject results = utils.getAudioTrack(command[1]);
     switch(results.getString("loadType")) {
       case "NO_MATCHES" -> event.getMessage().reply("Nothing found").queue();
       case "SEARCH_RESULT", "TRACK_LOADED" -> {
