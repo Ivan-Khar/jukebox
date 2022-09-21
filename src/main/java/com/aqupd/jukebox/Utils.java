@@ -7,6 +7,9 @@ import kong.unirest.json.JSONObject;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import static com.aqupd.jukebox.Config.*;
 import static com.aqupd.jukebox.Main.LOGGER;
@@ -69,5 +72,27 @@ public class Utils {
 
   public static String getTrackWithTimeAndURI(AudioTrack track) {
     return "`[" + getTimeFromMS(track.getInfo().length) + "]` [**" + track.getInfo().title + " - " + track.getInfo().author + "**](" + track.getInfo().uri + ")";
+  }
+
+  public static HashMap<Integer, List<AudioTrack>> getPaginatedListOfTracks(List<AudioTrack> tracks, Integer numOfTracks) {
+    HashMap<Integer, List<AudioTrack>> paginatedList = new HashMap<>();
+    int tracknum = 0; int pagenum = 0;
+    for (AudioTrack track: tracks) {
+      if(tracknum % numOfTracks == 0) pagenum++;
+      if(!paginatedList.containsKey(pagenum)) paginatedList.put(pagenum, new ArrayList<>());
+      paginatedList.get(pagenum).add(track);
+      tracknum++;
+    }
+    return paginatedList;
+  }
+
+  public static String getTrackPage(List<AudioTrack> tracks, Integer page, Integer pageTracksNumber) {
+    StringBuilder sb = new StringBuilder();
+    int tracknum = pageTracksNumber * (page-1);
+    for (AudioTrack track: tracks) {
+      tracknum++;
+      sb.append("`").append(tracknum).append(")` ").append(getTrackWithTimeAndURI(track)).append("\n");
+    }
+    return sb.toString();
   }
 }

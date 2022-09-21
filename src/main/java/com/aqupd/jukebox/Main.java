@@ -8,6 +8,7 @@ import com.aqupd.jukebox.commands.general.PingCommand;
 import com.aqupd.jukebox.commands.music.*;
 import com.aqupd.jukebox.commands.owner.ShutdownCommand;
 import com.aqupd.jukebox.commands.owner.TestCommand;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import lavalink.client.io.jda.JdaLavalink;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -55,6 +56,7 @@ public class Main {
 
   public static JDA jda;
   public static JdaLavalink lavaLink = new JdaLavalink(1, (a) -> jda);
+  public static EventWaiter waiter = new EventWaiter();
   public static HashMap<String, QueueManager> queues = new HashMap<>();
   public static final Logger LOGGER = LogManager.getLogger("Jukebox");
 
@@ -96,13 +98,13 @@ public class Main {
           .disableCache(CacheFlag.ACTIVITY)
           .setActivity(Activity.competing("a"))
           .setStatus(OnlineStatus.DO_NOT_DISTURB)
-          .addEventListeners(lavaLink, new Listener())
+          .addEventListeners(lavaLink, new Listener(), waiter)
           .setBulkDeleteSplittingEnabled(true)
-          .build();
-
+          .setEventPassthrough(true)
+          .build()
+          .awaitReady();
     } catch (Exception e) {
       LOGGER.trace("Exception! ", e);
     }
-
   }
 }
