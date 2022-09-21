@@ -55,17 +55,18 @@ public class Main {
   public static JDA jda;
   public static JdaLavalink lavaLink = new JdaLavalink(1, (a) -> jda);
   public static EventWaiter waiter = new EventWaiter();
+
+  public static List<BasicCommand> commandList = new ArrayList<>();
   public static HashMap<String, QueueManager> queues = new HashMap<>();
+
   public static final Logger LOGGER = LogManager.getLogger("Jukebox");
   public static Config config = new Config();
   public static ServerConfig serverConfig = new ServerConfig();
   public static Utils utils = new Utils();
-  public static List<BasicCommand> commandList = new ArrayList<>();
+
 
   public static void main(String[] args) {
     if(!System.getProperty("java.version").contains("18")) { LOGGER.info("Для использования данного бота вам нужно использовать Java 18"); }
-    config.load();
-    serverConfig.load();
 
     Collections.addAll(commandList,
         //General commands

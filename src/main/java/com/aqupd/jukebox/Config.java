@@ -11,7 +11,9 @@ import static com.aqupd.jukebox.Main.LOGGER;
 @SuppressWarnings({"FieldMayBeFinal", "ResultOfMethodCallIgnored", "FieldCanBeLocal", "unused"})
 public class Config {
 
-  public Config() {}
+  public Config() {
+    load();
+  }
 
   Gson gson = new GsonBuilder().setPrettyPrinting().create();
 

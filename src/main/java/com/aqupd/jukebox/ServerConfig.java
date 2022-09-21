@@ -11,7 +11,9 @@ import static com.aqupd.jukebox.Main.LOGGER;
 
 public class ServerConfig {
 
-  public ServerConfig() {}
+  public ServerConfig() {
+    load();
+  }
 
   Gson gson = new GsonBuilder().setPrettyPrinting().create();
   private final File confFile = new File("./serversettings.json");
