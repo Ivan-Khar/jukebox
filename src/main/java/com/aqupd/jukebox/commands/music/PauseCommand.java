@@ -14,7 +14,6 @@ public class PauseCommand extends MusicCategory {
     this.playingMusic = true;
   }
 
-
   @Override
   public void onCommand(MessageReceivedEvent event) {
     LavalinkPlayer player = lavaLink.getLink(event.getGuild()).getPlayer();

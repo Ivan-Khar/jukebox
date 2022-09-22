@@ -42,32 +42,32 @@ public class ListCommand extends MusicCategory {
       updateMessage(event.getGuild(), message, page[0], paginatedList);
 
       waiter.waitForEvent(ButtonInteractionEvent.class,
-          e -> {
-            if(e.getUser().isBot() && e.getMessage().getIdLong() != message.getIdLong()) return false;
-            if(e.getButton().getId() == null) return false;
-            if(e.getMessage().getIdLong() == message.getIdLong()) {
-              e.deferEdit().queue();
-              switch (e.getButton().getId()) {
-                case "stop" -> {
-                  return true;
-                }
-                case "1" -> {
-                  if (page[0] > 1) page[0]--;
-                  updateMessage(event.getGuild(), message, page[0], paginatedList);
-                  return false;
-                }
-                case "2" -> {
-                  if (page[0] < paginatedList.size()) page[0]++;
-                  updateMessage(event.getGuild(), message, page[0], paginatedList);
-                  return false;
-                }
+        e -> {
+          if(e.getUser().isBot() && e.getMessage().getIdLong() != message.getIdLong()) return false;
+          if(e.getButton().getId() == null) return false;
+          if(e.getMessage().getIdLong() == message.getIdLong()) {
+            e.deferEdit().queue();
+            switch (e.getButton().getId()) {
+              case "stop" -> {
+                return true;
+              }
+              case "1" -> {
+                if (page[0] > 1) page[0]--;
+                updateMessage(event.getGuild(), message, page[0], paginatedList);
+                return false;
+              }
+              case "2" -> {
+                if (page[0] < paginatedList.size()) page[0]++;
+                updateMessage(event.getGuild(), message, page[0], paginatedList);
+                return false;
               }
             }
-            return false;
-          },
-          e -> e.getMessage().editMessageComponents(Collections.emptyList()).queue(),
-          1, TimeUnit.MINUTES,
-          () -> message.editMessageComponents(Collections.emptyList()).queue());
+          }
+          return false;
+        },
+        e -> e.getMessage().editMessageComponents(Collections.emptyList()).queue(),
+        1, TimeUnit.MINUTES,
+        () -> message.editMessageComponents(Collections.emptyList()).queue());
     });
   }
 
@@ -77,7 +77,6 @@ public class ListCommand extends MusicCategory {
     builder.setFooter("Page " + page + "/" + paginatedList.size());
     message.editMessageEmbeds(builder.build()).queue(response -> {
       String header = headerBuilder(guild);
-      LOGGER.info(response.getContentDisplay().equals(header) + " " + header + " " + response.getContentDisplay());
       if(!response.getContentDisplay().equals(header)) message.editMessage(headerBuilder(guild)).queue();
     });
   }

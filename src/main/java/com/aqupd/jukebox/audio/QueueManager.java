@@ -37,8 +37,14 @@ public class QueueManager {
   PlayerEventListenerAdapter listener = new PlayerEventListenerAdapter() {
     @Override
     public void onTrackEnd(IPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-      if(!queue.isEmpty()) player.playTrack(queue.remove(0));
-      else {
+      if(!queue.isEmpty()) {
+        String repeat = serverConfig.getGuildSetting(guild, "repeat");
+        if(repeat != null && repeat.equals("single")) queue.add(0, track);
+        player.playTrack(queue.remove(0));
+        if(repeat != null && repeat.equals("on")) {
+          queue.add(track);
+        }
+      } else {
         lavaLink.getLink(guild).destroy();
         queues.remove(guild);
       }
