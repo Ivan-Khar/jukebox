@@ -81,6 +81,7 @@ public class Main {
         new RemoveCommand(),
         new ListCommand(),
         new NowPlayingCommand(),
+        new PauseCommand(),
 
         //Owner commands
         new TestCommand(),

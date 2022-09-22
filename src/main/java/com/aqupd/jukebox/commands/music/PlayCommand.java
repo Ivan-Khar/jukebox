@@ -28,6 +28,11 @@ public class PlayCommand extends MusicCategory {
     LavalinkPlayer player = link.getPlayer();
     String[] command = event.getMessage().getContentDisplay().split(" ", 2);
     if(command.length == 1) {
+      if(player.getPlayingTrack() != null && player.isPaused()) {
+        player.setPaused(false);
+        event.getMessage().reply("resumed playing of the track").queue();
+        return;
+      }
       event.getMessage().reply("you need to type music url/name").queue();
       return;
     }
