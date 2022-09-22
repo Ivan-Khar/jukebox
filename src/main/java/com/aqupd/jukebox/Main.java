@@ -82,6 +82,7 @@ public class Main {
         new ListCommand(),
         new NowPlayingCommand(),
         new PauseCommand(),
+        new RepeatCommand(),
 
         //Owner commands
         new TestCommand(),
