@@ -41,6 +41,7 @@ public class Main {
       Permission.VOICE_SPEAK,
       Permission.NICKNAME_CHANGE
   };
+	
   public static final GatewayIntent[] INTENTS = {
       GatewayIntent.MESSAGE_CONTENT,
       GatewayIntent.GUILD_PRESENCES,
