@@ -80,6 +80,7 @@ public class Main {
         new SkipCommand(),
         new RemoveCommand(),
         new ListCommand(),
+        new NowPlayingCommand(),
 
         //Owner commands
         new TestCommand(),

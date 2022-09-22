@@ -30,7 +30,7 @@ public abstract class MusicCategory extends BasicCommand {
       event.getMessage().reply("You need to listen to music in order to use this command!").queue();
       return;
     }
-    if(hasQueue && !queues.containsKey(event.getGuild().getId())) {
+    if(hasQueue && (!queues.containsKey(event.getGuild().getId()) || queues.get(event.getGuild().getId()).get().isEmpty())) {
       event.getMessage().reply("Queue is empty").queue();
       return;
     }

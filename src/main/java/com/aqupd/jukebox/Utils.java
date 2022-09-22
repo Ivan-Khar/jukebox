@@ -53,8 +53,7 @@ public class Utils {
     return String.format("%.1f %ciB", value / 1024.0, ci.current());
   }
 
-  private String getTimeFromMS(long ms) {
-    int mil     = (int) ms % 1000;
+  public String getTimeFromMS(long ms) {
     int seconds = (int) (ms / 1000) % 60 ;
     int minutes = (int) ((ms / (1000*60)) % 60);
     int hours   = (int) (ms / (1000*60*60));
@@ -62,8 +61,16 @@ public class Utils {
     String time;
     if(hours > 0)        time = String.format("%d:%02d:%02d", hours, minutes, seconds);
     else if(minutes > 0) time = String.format("%02d:%02d", minutes, seconds);
-    else                 time = String.format("%02d.%03d", seconds, mil);
+    else                 time = String.format("00:%02d", seconds);
     return time;
+  }
+
+  public String getTrack(AudioTrack track) {
+    return "**" + track.getInfo().title + "**";
+  }
+
+  public String getTrackWithURI(AudioTrack track) {
+    return "[**" + track.getInfo().title + "**](" + track.getInfo().uri + ")";
   }
 
   public String getTrackWithTime(AudioTrack track) {
