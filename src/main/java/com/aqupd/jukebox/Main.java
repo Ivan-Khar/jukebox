@@ -84,6 +84,7 @@ public class Main {
         new NowPlayingCommand(),
         new PauseCommand(),
         new RepeatCommand(),
+        new ShuffleCommand(),
 
         //Owner commands
         new TestCommand(),

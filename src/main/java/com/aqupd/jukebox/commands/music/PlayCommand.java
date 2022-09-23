@@ -2,6 +2,8 @@ package com.aqupd.jukebox.commands.music;
 
 import com.aqupd.jukebox.audio.QueueManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+
+import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 import lavalink.client.LavalinkUtil;
 import lavalink.client.io.jda.JdaLink;
@@ -54,6 +56,12 @@ public class PlayCommand extends MusicCategory {
         }
       }
       case "PLAYLIST_LOADED" -> {
+        if(serverConfig.getGuildSetting(event.getGuild().getId(), "shuffle").equals("on")) {
+          JSONArray tracks = results.getJSONArray("tracks");
+          Collections.shuffle(tracks);
+          results.getJSONArray("tracks");
+        };
+      
         results.getJSONArray("tracks").forEach(jo -> {
           try {
             JSONObject trackInfo = ((JSONObject) jo);
