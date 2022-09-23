@@ -46,7 +46,7 @@ tasks.jar {
 }
 
 application {
-    mainClass = '${mainClassName}'
+    mainClass = "${mainClassName}"
 }
 
 File runningDir = new File('run/')
