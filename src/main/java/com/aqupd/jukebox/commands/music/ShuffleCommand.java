@@ -1,5 +1,6 @@
 package com.aqupd.jukebox.commands.music;
 
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import static com.aqupd.jukebox.Main.*;
@@ -14,7 +15,15 @@ public class ShuffleCommand extends MusicCategory {
 
 	@Override
 	public void onCommand(MessageReceivedEvent event) {
-		serverConfig.setGuildSetting(event.getGuild().getId(), "shuffle", "off");
-		
-	}
+    String guID = event.getGuild().getId();
+    Message msg = event.getMessage();
+
+    if(serverConfig.getGuildSetting(guID, "shuffle") == null || serverConfig.getGuildSetting(guID, "shuffle").equals("off")) {
+      serverConfig.setGuildSetting(guID, "shuffle", "on");
+      msg.reply("Shuffle mode: on").queue();
+    } else {
+      serverConfig.setGuildSetting(guID, "shuffle", "off");
+	    msg.reply("Shuffle mode: off").queue();
+    }
+  }
 }
