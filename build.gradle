@@ -1,6 +1,7 @@
 //file:noinspection VulnerableLibrariesLocal
 plugins {
     id 'java'
+    id 'application'
     id("com.github.johnrengelman.shadow") version "6.0.0"
 }
 
