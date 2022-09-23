@@ -44,3 +44,7 @@ def mainClassName = getGroup() + '.Main'
 tasks.jar {
     manifest.attributes["Main-Class"] = "${mainClassName}"
 }
+
+application {
+    mainClass = '${mainClassName}'
+}
