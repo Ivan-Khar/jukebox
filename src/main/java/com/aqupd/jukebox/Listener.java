@@ -44,5 +44,7 @@ public class Listener extends ListenerAdapter {
   }
 
   @Override
-  public void onShutdown(@Nonnull ShutdownEvent event) {}
+  public void onShutdown(@Nonnull ShutdownEvent event) {
+
+  }
 }

@@ -85,6 +85,7 @@ public class Main {
         new PauseCommand(),
         new RepeatCommand(),
         new ShuffleCommand(),
+        new VolumeCommand(),
 
         //Owner commands
         new TestCommand(),

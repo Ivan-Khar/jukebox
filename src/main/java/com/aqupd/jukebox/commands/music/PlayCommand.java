@@ -30,6 +30,7 @@ public class PlayCommand extends MusicCategory {
     JdaLink link = lavaLink.getLink(event.getGuild());
     LavalinkPlayer player = link.getPlayer();
     String[] command = event.getMessage().getContentDisplay().split(" ", 2);
+    String guID = event.getGuild().getId();
     if(command.length == 1) {
       if(player.getPlayingTrack() != null && player.isPaused()) {
         player.setPaused(false);
@@ -40,8 +41,8 @@ public class PlayCommand extends MusicCategory {
       return;
     }
 
-    String shuffle = serverConfig.getGuildSetting(event.getGuild().getId(), "shuffle");
-    QueueManager queue = utils.getQueueForGuild(event.getGuild().getId());
+    boolean shuffle = serverConfig.getGuildSetting(guID, "shuffle") != null && serverConfig.getGuildSetting(guID, "shuffle").getAsBoolean();
+    QueueManager queue = utils.getQueueForGuild(guID);
     link.connect(event.getMember().getVoiceState().getChannel());
     JSONObject results = utils.getAudioTrack(command[1]);
 
@@ -50,7 +51,7 @@ public class PlayCommand extends MusicCategory {
       case "SEARCH_RESULT", "TRACK_LOADED" -> {
         try {
           AudioTrack track = LavalinkUtil.toAudioTrack(results.getJSONArray("tracks").getJSONObject(0).getString("track"));
-          if(shuffle != null && shuffle.equals("on")) queue.addRandom(track);
+          if(shuffle) queue.addRandom(track);
           else queue.add(track);
           event.getMessage().reply(String.format("playing track %1$s", track.getInfo().title)).queue();
         } catch(IOException e) {
@@ -69,7 +70,7 @@ public class PlayCommand extends MusicCategory {
           }
         });
 
-        if(shuffle != null && shuffle.equals("on")) Collections.shuffle(tracks);
+        if(shuffle) Collections.shuffle(tracks);
         tracks.forEach(queue::add);
 
         String playlistName = results.getJSONObject("playlistInfo").getString("name");
@@ -79,7 +80,7 @@ public class PlayCommand extends MusicCategory {
       case "LOAD_FAILED" -> {
         String exception = results.getJSONObject("exception").getString("message");
         event.getMessage().reply(String.format("Couldn't play this audio track. %1$s", exception)).queue();
-        LOGGER.error(String.format("got error while trying to play audio track in guild \"%1$s\". arg: \"%2$s\", error: \"%3$s\"", event.getGuild().getId(), command[1], exception));
+        LOGGER.error(String.format("got error while trying to play audio track in guild \"%1$s\". arg: \"%2$s\", error: \"%3$s\"", guID, command[1], exception));
       }
     }
   }

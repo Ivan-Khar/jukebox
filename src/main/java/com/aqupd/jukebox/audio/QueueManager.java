@@ -25,6 +25,8 @@ public class QueueManager {
     LavalinkPlayer player = lavaLink.getLink(guild).getPlayer();
     if(queue.isEmpty() && player.getPlayingTrack() == null) {
       player.addListener(listener);
+      float vol = (serverConfig.getGuildSetting(guild, "volume") != null) ? serverConfig.getGuildSetting(guild, "volume").getAsFloat() : 1.0f;
+      player.getFilters().setVolume(vol).commit();
       player.playTrack(track);
     } else {
       queue.add(track);
@@ -35,6 +37,8 @@ public class QueueManager {
     LavalinkPlayer player = lavaLink.getLink(guild).getPlayer();
     if(queue.isEmpty() && player.getPlayingTrack() == null) {
       player.addListener(listener);
+      float vol = (serverConfig.getGuildSetting(guild, "volume") != null) ? serverConfig.getGuildSetting(guild, "volume").getAsFloat() : 1.0f;
+      player.getFilters().setVolume(vol).commit();
       player.playTrack(track);
     } else {
       queue.add(0, track);
@@ -45,6 +49,8 @@ public class QueueManager {
     LavalinkPlayer player = lavaLink.getLink(guild).getPlayer();
     if(queue.isEmpty() && player.getPlayingTrack() == null) {
       player.addListener(listener);
+      float vol = (serverConfig.getGuildSetting(guild, "volume") != null) ? serverConfig.getGuildSetting(guild, "volume").getAsFloat() : 1.0f;
+      player.getFilters().setVolume(vol).commit();
       player.playTrack(track);
     } else {
       Random random = new Random();
@@ -60,7 +66,7 @@ public class QueueManager {
     @Override
     public void onTrackEnd(IPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
       if(!queue.isEmpty()) {
-        String repeat = serverConfig.getGuildSetting(guild, "repeat");
+        String repeat = (serverConfig.getGuildSetting(guild, "repeat") == null) ? null : serverConfig.getGuildSetting(guild, "repeat").getAsString();
         if(repeat != null && repeat.equals("single")) queue.add(0, track);
         player.playTrack(queue.remove(0));
         if(repeat != null && repeat.equals("on")) {

@@ -21,15 +21,25 @@ public class ServerConfig {
   private JsonObject settings = new JsonObject();
 
   @Nullable
-  public String getGuildSetting(String guildId, String setting) {
+  public JsonPrimitive getGuildSetting(String guildId, String setting) {
     try {
-      return settings.get(guildId).getAsJsonObject().get(setting).getAsString();
+      return settings.get(guildId).getAsJsonObject().get(setting).getAsJsonPrimitive();
     } catch(NullPointerException ex) {
       return null;
     }
   }
 
   public void setGuildSetting(String guildId, String setting, String value) {
+    if(!settings.has(guildId)) settings.add(guildId, new JsonObject());
+    settings.get(guildId).getAsJsonObject().add(setting, new JsonPrimitive(value));
+    save();
+  }
+  public void setGuildSetting(String guildId, String setting, Boolean value) {
+    if(!settings.has(guildId)) settings.add(guildId, new JsonObject());
+    settings.get(guildId).getAsJsonObject().add(setting, new JsonPrimitive(value));
+    save();
+  }
+  public void setGuildSetting(String guildId, String setting, Number value) {
     if(!settings.has(guildId)) settings.add(guildId, new JsonObject());
     settings.get(guildId).getAsJsonObject().add(setting, new JsonPrimitive(value));
     save();

@@ -66,7 +66,7 @@ public class ListCommand extends MusicCategory {
           return false;
         },
         e -> e.getMessage().editMessageComponents(Collections.emptyList()).queue(),
-        1, TimeUnit.MINUTES,
+        30, TimeUnit.SECONDS,
         () -> message.editMessageComponents(Collections.emptyList()).queue());
     });
   }

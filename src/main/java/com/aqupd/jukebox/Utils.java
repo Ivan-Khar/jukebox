@@ -74,11 +74,11 @@ public class Utils {
   }
 
   public String getTrackWithTime(AudioTrack track) {
-    return "`[" + getTimeFromMS(track.getInfo().length) + "]` **" + track.getInfo().title + " - " + track.getInfo().author + "**";
+    return "`[" + getTimeFromMS(track.getDuration()) + "]` **" + track.getInfo().title + " - " + track.getInfo().author + "**";
   }
 
   public String getTrackWithTimeAndURI(AudioTrack track) {
-    return "`[" + getTimeFromMS(track.getInfo().length) + "]` [**" + track.getInfo().title + " - " + track.getInfo().author + "**](" + track.getInfo().uri + ")";
+    return "`[" + getTimeFromMS(track.getDuration()) + "]` [**" + track.getInfo().title + " - " + track.getInfo().author + "**](" + track.getInfo().uri + ")";
   }
 
   public HashMap<Integer, List<AudioTrack>> getPaginatedListOfTracks(List<AudioTrack> tracks, Integer numOfTracks) {
