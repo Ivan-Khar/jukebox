@@ -37,4 +37,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-/run/
+
+### Test run ###
+run/
