@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
+import javax.annotation.Nullable;
 import java.io.*;
 
 import static com.aqupd.jukebox.Main.LOGGER;
@@ -19,6 +20,7 @@ public class ServerConfig {
   private final File confFile = new File("./serversettings.json");
   private JsonObject settings = new JsonObject();
 
+  @Nullable
   public String getGuildSetting(String guildId, String setting) {
     try {
       return settings.get(guildId).getAsJsonObject().get(setting).getAsString();

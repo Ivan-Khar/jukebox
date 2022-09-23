@@ -83,6 +83,7 @@ public class ListCommand extends MusicCategory {
 
   private String headerBuilder(Guild guild) {
     AudioTrack currentPlaying = lavaLink.getLink(guild).getPlayer().getPlayingTrack();
+    if(currentPlaying == null) return "Not playing";
     return String.format("Playing: %s", utils.getTrackWithTime(currentPlaying));
   }
 }

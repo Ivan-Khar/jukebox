@@ -7,6 +7,7 @@ import lavalink.client.player.LavalinkPlayer;
 import lavalink.client.player.event.PlayerEventListenerAdapter;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static com.aqupd.jukebox.Main.*;
 
@@ -27,6 +28,27 @@ public class QueueManager {
       player.playTrack(track);
     } else {
       queue.add(track);
+    }
+  }
+
+  public void addNext(AudioTrack track) {
+    LavalinkPlayer player = lavaLink.getLink(guild).getPlayer();
+    if(queue.isEmpty() && player.getPlayingTrack() == null) {
+      player.addListener(listener);
+      player.playTrack(track);
+    } else {
+      queue.add(0, track);
+    }
+  }
+
+  public void addRandom(AudioTrack track) {
+    LavalinkPlayer player = lavaLink.getLink(guild).getPlayer();
+    if(queue.isEmpty() && player.getPlayingTrack() == null) {
+      player.addListener(listener);
+      player.playTrack(track);
+    } else {
+      Random random = new Random();
+      queue.add(random.nextInt(queue.size()), track);
     }
   }
 

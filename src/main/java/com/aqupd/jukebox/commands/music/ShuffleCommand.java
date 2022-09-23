@@ -17,8 +17,8 @@ public class ShuffleCommand extends MusicCategory {
 	public void onCommand(MessageReceivedEvent event) {
     String guID = event.getGuild().getId();
     Message msg = event.getMessage();
-
-    if(serverConfig.getGuildSetting(guID, "shuffle") == null || serverConfig.getGuildSetting(guID, "shuffle").equals("off")) {
+    String shuffle = serverConfig.getGuildSetting(guID, "shuffle");
+    if(shuffle == null || shuffle.equals("off")) {
       serverConfig.setGuildSetting(guID, "shuffle", "on");
       msg.reply("Shuffle mode: on").queue();
     } else {

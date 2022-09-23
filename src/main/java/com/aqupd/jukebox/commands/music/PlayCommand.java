@@ -2,8 +2,6 @@ package com.aqupd.jukebox.commands.music;
 
 import com.aqupd.jukebox.audio.QueueManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-
-import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 import lavalink.client.LavalinkUtil;
 import lavalink.client.io.jda.JdaLink;
@@ -11,6 +9,9 @@ import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static com.aqupd.jukebox.Main.*;
 
@@ -39,16 +40,18 @@ public class PlayCommand extends MusicCategory {
       return;
     }
 
+    String shuffle = serverConfig.getGuildSetting(event.getGuild().getId(), "shuffle");
     QueueManager queue = utils.getQueueForGuild(event.getGuild().getId());
-
     link.connect(event.getMember().getVoiceState().getChannel());
     JSONObject results = utils.getAudioTrack(command[1]);
+
     switch(results.getString("loadType")) {
       case "NO_MATCHES" -> event.getMessage().reply("Nothing found").queue();
       case "SEARCH_RESULT", "TRACK_LOADED" -> {
         try {
           AudioTrack track = LavalinkUtil.toAudioTrack(results.getJSONArray("tracks").getJSONObject(0).getString("track"));
-          queue.add(track);
+          if(shuffle != null && shuffle.equals("on")) queue.addRandom(track);
+          else queue.add(track);
           event.getMessage().reply(String.format("playing track %1$s", track.getInfo().title)).queue();
         } catch(IOException e) {
           event.getMessage().reply("Couldn't get track info").queue();
@@ -56,22 +59,19 @@ public class PlayCommand extends MusicCategory {
         }
       }
       case "PLAYLIST_LOADED" -> {
-        if(serverConfig.getGuildSetting(event.getGuild().getId(), "shuffle").equals("on")) {
-          JSONArray tracks = results.getJSONArray("tracks");
-          Collections.shuffle(tracks);
-          results.getJSONArray("tracks");
-        };
-      
-        results.getJSONArray("tracks").forEach(jo -> {
+        List<AudioTrack> tracks = new ArrayList<>();
+        results.getJSONArray("tracks").forEach(o -> {
           try {
-            JSONObject trackInfo = ((JSONObject) jo);
-            AudioTrack track = LavalinkUtil.toAudioTrack(trackInfo.getString("track"));
-            queue.add(track);
-          } catch(IOException e) {
-            event.getMessage().reply("Couldn't get track info").queue();
+            String trackInfo = ((JSONObject) o).getString("track");
+            tracks.add(LavalinkUtil.toAudioTrack(trackInfo));
+          } catch (IOException e) {
             LOGGER.error("Retrieving audio info error", e);
           }
         });
+
+        if(shuffle != null && shuffle.equals("on")) Collections.shuffle(tracks);
+        tracks.forEach(queue::add);
+
         String playlistName = results.getJSONObject("playlistInfo").getString("name");
         int playlistCount = results.getJSONArray("tracks").length();
         event.getMessage().reply(String.format("Playing playlist %1$s with %2$d entries", playlistName, playlistCount)).queue();
